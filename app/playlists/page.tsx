@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { SpotifyPlaylist } from "@/types";
 import Image from "next/image";
 
@@ -113,6 +113,8 @@ export default function PlaylistsPage() {
                   <Image
                     src={imageUrl}
                     alt={playlist.name}
+                    width={300}
+                    height={300}
                     className="w-full h-full object-cover"
                   />
                 ) : (

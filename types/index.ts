@@ -3,7 +3,7 @@ export interface SpotifyPlaylist {
   name: string;
   description: string;
   images: { url: string }[];
-  tracks: { total: number };
+  tracks: { total: number } | null;
 }
 
 export interface SpotifyTrack {

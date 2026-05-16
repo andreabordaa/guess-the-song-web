@@ -139,7 +139,7 @@ export default function PlaylistsPage() {
                   {playlist.name}
                 </p>
                 <p className="text-xs text-brand-muted mt-0.5">
-                  {playlist.tracks.total} songs
+                  {playlist.tracks?.total ?? 0} songs
                 </p>
                 {isSelected && (
                   <p className="text-xs text-spotify font-medium mt-1">

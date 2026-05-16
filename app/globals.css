@@ -18,6 +18,8 @@
   --color-teal-light: #5dcaa5;
   --color-spotify: #1db954;
   --color-brand-text: #e8f5f0;
+  --color-brand-muted: rgba(232, 245, 240, 0.45);
+  --color-brand-border: rgba(93, 202, 165, 0.15);
   --color-wrong: #ff6b6b;
 
   --border-radius-xl: 16px;

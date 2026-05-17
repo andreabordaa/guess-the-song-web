@@ -14,7 +14,6 @@ export interface SpotifyTrack {
     name: string;
     images: { url: string }[];
   };
-  preview_url: string | null;
 }
 
 export interface GameRound {

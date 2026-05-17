@@ -40,8 +40,14 @@ export async function GET(req: NextRequest) {
   );
 
   if (!res.ok) {
+    const errorBody = await res.json();
+    console.error(
+      "Spotify tracks error:",
+      res.status,
+      JSON.stringify(errorBody),
+    );
     return NextResponse.json(
-      { error: "Failed to fetch tracks" },
+      { error: "Failed to fetch tracks", details: errorBody },
       { status: 500 },
     );
   }

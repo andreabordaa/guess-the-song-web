@@ -154,12 +154,11 @@ export default function GamePage() {
   if (status === "loading") {
     return (
       <main className="min-h-screen flex flex-col items-center justify-center gap-3">
-        <div className="w-8 h-8 border-2 border-spotify border-t-transparent rounded-full animate-spin">
-          <p className="text-brand-muted text-sm">loading your game...</p>
-          <p className="text-brand-muted text-xs opacity-60">
-            fetching audio previews, this may take a moment
-          </p>
-        </div>
+        <div className="w-8 h-8 border-2 border-spotify border-t-transparent rounded-full animate-spin" />
+        <p className="text-brand-muted text-sm">loading your game...</p>
+        <p className="text-brand-muted text-xs opacity-60">
+          fetching audio previews, this may take a moment
+        </p>
       </main>
     );
   }

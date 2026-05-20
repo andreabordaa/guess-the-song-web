@@ -35,19 +35,13 @@ export async function GET(req: NextRequest) {
   }
 
   const res = await spotifyFetch(
-    `/playlists/${playlistId}/tracks?limit=50&fields=items(track(id,name,artists,album(name,images)))`,
+    `/playlists/${playlistId}/items?limit=50&fields=items(track(id,name,artists,album(name,images)))`,
     accessToken,
   );
 
   if (!res.ok) {
-    const errorBody = await res.json();
-    console.error(
-      "Spotify tracks error:",
-      res.status,
-      JSON.stringify(errorBody),
-    );
     return NextResponse.json(
-      { error: "Failed to fetch tracks", details: errorBody },
+      { error: "Failed to fetch tracks" },
       { status: 500 },
     );
   }

@@ -14,7 +14,7 @@ interface RawTrack {
 }
 
 interface RawPlaylistItem {
-  track: RawTrack | null;
+  track: RawTrack | null | undefined;
 }
 
 function shuffle<T>(array: T[]): T[] {
@@ -50,11 +50,15 @@ export async function GET(req: NextRequest) {
 
   // filter out null tracks and tracks without an id
   const allTracks: RawTrack[] = data.items
-    .map((item: RawPlaylistItem) => item.track)
     .filter(
-      (track: RawTrack | null): track is RawTrack =>
-        track !== null && !!track.id,
-    );
+      (item: RawPlaylistItem) =>
+        item !== null &&
+        item !== undefined &&
+        item.track !== null &&
+        item.track !== undefined &&
+        item.track.id !== undefined,
+    )
+    .map((item: RawPlaylistItem) => item.track as RawTrack);
 
   if (allTracks.length < 4) {
     return NextResponse.json(

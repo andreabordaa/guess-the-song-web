@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getAccessToken, spotifyFetch } from "@/lib/spotify";
+import { getAccessToken } from "@/lib/spotify";
 
 export async function GET() {
   const accessToken = await getAccessToken();
@@ -8,36 +8,28 @@ export async function GET() {
     return NextResponse.json({ error: "No access token found" });
   }
 
-  // test the exact playlist from your logs
-  const playlistId = "4UHadNNHmjQr0ECB121Sa3";
+  // check what this token can actually do by inspecting it
+  const res = await fetch(`https://api.spotify.com/v1/me/playlists?limit=1`, {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
 
-  // test 1: items endpoint with fields
-  const withFields = await spotifyFetch(
-    `/playlists/${playlistId}/items?limit=5&fields=items(track(id,name,artists,album(name,images)))`,
-    accessToken,
-  );
-  const withFieldsData = await withFields.json();
+  // try a collaborative playlist owned by you specifically
+  const ownedRes = await fetch(`https://api.spotify.com/v1/me/tracks?limit=1`, {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
+  const ownedData = await ownedRes.json();
 
-  // test 2: items endpoint without fields filter
-  const withoutFields = await spotifyFetch(
-    `/playlists/${playlistId}/items?limit=5`,
-    accessToken,
-  );
-  const withoutFieldsData = await withoutFields.json();
-
-  // test 3: tracks endpoint (old one)
-  const tracksEndpoint = await spotifyFetch(
-    `/playlists/${playlistId}/tracks?limit=5`,
-    accessToken,
-  );
-  const tracksData = await tracksEndpoint.json();
+  // check token info via Spotify introspection
+  const introspect = await fetch("https://api.spotify.com/v1/me", {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
+  const meData = await introspect.json();
 
   return NextResponse.json({
-    withFieldsStatus: withFields.status,
-    withFieldsData,
-    withoutFieldsStatus: withoutFields.status,
-    withoutFieldsData,
-    tracksEndpointStatus: tracksEndpoint.status,
-    tracksData,
+    tokenPreview: accessToken.substring(0, 30) + "...",
+    playlistsStatus: res.status,
+    savedTracksStatus: ownedRes.status,
+    savedTracksData: ownedData,
+    me: meData,
   });
 }

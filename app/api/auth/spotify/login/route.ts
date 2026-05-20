@@ -4,8 +4,11 @@ const SCOPES = [
   "streaming",
   "user-read-email",
   "user-read-private",
+  "user-library-read",
   "playlist-read-private",
   "playlist-read-collaborative",
+  "playlist-modify-public",
+  "playlist-modify-private",
 ].join(" ");
 
 export async function GET() {

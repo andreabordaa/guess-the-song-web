@@ -70,10 +70,10 @@ export async function GET(req: NextRequest) {
   }
 
   const shuffled = shuffle(allTracks);
-  const roundTracks = shuffled.slice(0, Math.min(10, shuffled.length));
+  const candidateTracks = shuffled.slice(0, Math.min(20, shuffled.length));
 
   const rounds = await Promise.all(
-    roundTracks.map(async (correctTrack: Track) => {
+    candidateTracks.map(async (correctTrack: Track) => {
       let previewUrl: string | null = null;
 
       try {
@@ -105,11 +105,14 @@ export async function GET(req: NextRequest) {
     }),
   );
 
-  const validRounds = rounds.filter((r) => r.previewUrl !== null);
+  // filter out rounds with no preview URL then cap at exactly 10
+  const validRounds = rounds.filter((r) => r.previewUrl !== null).slice(0, 10);
 
-  if (validRounds.length === 0) {
+  if (validRounds.length < 4) {
     return NextResponse.json(
-      { error: "Could not find preview URLs for any tracks" },
+      {
+        error: `Not enough previewable tracks found, only got ${validRounds.length}`,
+      },
       { status: 500 },
     );
   }

@@ -8,8 +8,19 @@ export async function GET() {
     return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
   }
 
-  const res = await spotifyFetch("/me/playlists?limit=50", accessToken);
+  // fetch the current user's profile to get their id
+  const meRes = await spotifyFetch("/me", accessToken);
+  if (!meRes.ok) {
+    return NextResponse.json(
+      { error: "Failed to fetch user" },
+      { status: 500 },
+    );
+  }
+  const me = await meRes.json();
+  const userId = me.id;
 
+  // fetch all playlists
+  const res = await spotifyFetch("/me/playlists?limit=50", accessToken);
   if (!res.ok) {
     return NextResponse.json(
       { error: "Failed to fetch playlists" },
@@ -19,5 +30,10 @@ export async function GET() {
 
   const data = await res.json();
 
-  return NextResponse.json(data.items);
+  // only return playlists owned by the current user
+  const ownedPlaylists = data.items.filter(
+    (playlist: { owner: { id: string } }) => playlist.owner.id === userId,
+  );
+
+  return NextResponse.json(ownedPlaylists);
 }

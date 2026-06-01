@@ -72,7 +72,7 @@ export default function GamePage() {
     setProgress(0);
 
     audio.addEventListener("timeupdate", () => {
-      if (audio.currentTime >= PREVIEW_DURATION) {
+      if (audio.currentTime >= PREVIEW_DURATION - 0.01) {
         audio.pause();
         setIsPlaying(false);
       }
@@ -338,7 +338,7 @@ export default function GamePage() {
                 return (
                   <div
                     key={i}
-                    style={{ height: h }}
+                    style={{ height: h, transition: "width 0.1s linear" }}
                     className={`w-1 rounded-sm transition-colors duration-100 ${
                       filled ? "bg-spotify" : "bg-teal-mid/40"
                     }`}
@@ -352,7 +352,7 @@ export default function GamePage() {
           <div className="w-full bg-white/6 rounded-full h-1">
             <div
               className="bg-spotify h-1 rounded-full transition-all duration-100"
-              style={{ width: `${progress}%` }}
+              style={{ width: `${progress}%`, transition: "width 0.1s linear" }}
             />
           </div>
           <div className="flex justify-between">
@@ -360,7 +360,11 @@ export default function GamePage() {
               {((progress / 100) * PREVIEW_DURATION).toFixed(1)}s
             </span>
             <span className="text-xs text-brand-muted">
-              {PREVIEW_DURATION}s
+              {Math.min(
+                (progress / 100) * PREVIEW_DURATION,
+                PREVIEW_DURATION,
+              ).toFixed(1)}
+              s
             </span>
           </div>
         </div>

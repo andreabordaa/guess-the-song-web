@@ -59,7 +59,6 @@ export default function GamePage() {
     const round = rounds[currentRound];
     if (!round?.previewUrl) return;
 
-    // clean up previous audio
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current = null;
@@ -71,16 +70,34 @@ export default function GamePage() {
     setIsPlaying(false);
     setProgress(0);
 
-    audio.addEventListener("timeupdate", () => {
-      if (audio.currentTime >= PREVIEW_DURATION - 0.01) {
+    let animationFrame: number;
+
+    function tick() {
+      const current = Math.min(audio.currentTime, PREVIEW_DURATION);
+      const pct = (current / PREVIEW_DURATION) * 100;
+      setProgress(Math.min(pct, 100));
+
+      if (audio.currentTime >= PREVIEW_DURATION) {
         audio.pause();
         setIsPlaying(false);
+        setProgress(100);
+        return;
       }
-      setProgress((audio.currentTime / PREVIEW_DURATION) * 100);
+
+      animationFrame = requestAnimationFrame(tick);
+    }
+
+    audio.addEventListener("play", () => {
+      animationFrame = requestAnimationFrame(tick);
+    });
+
+    audio.addEventListener("pause", () => {
+      cancelAnimationFrame(animationFrame);
     });
 
     return () => {
       audio.pause();
+      cancelAnimationFrame(animationFrame);
     };
   }, [currentRound, rounds, status]);
 
@@ -338,7 +355,7 @@ export default function GamePage() {
                 return (
                   <div
                     key={i}
-                    style={{ height: h, transition: "width 0.1s linear" }}
+                    style={{ height: h }}
                     className={`w-1 rounded-sm transition-colors duration-100 ${
                       filled ? "bg-spotify" : "bg-teal-mid/40"
                     }`}
@@ -351,8 +368,8 @@ export default function GamePage() {
           {/* Progress bar */}
           <div className="w-full bg-white/6 rounded-full h-1">
             <div
-              className="bg-spotify h-1 rounded-full transition-all duration-100"
-              style={{ width: `${progress}%`, transition: "width 0.1s linear" }}
+              className="bg-spotify h-1 rounded-full"
+              style={{ width: `${progress}%` }}
             />
           </div>
           <div className="flex justify-between">

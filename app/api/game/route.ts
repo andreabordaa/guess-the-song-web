@@ -17,6 +17,15 @@ interface PlaylistEntry {
   item?: Track | null;
 }
 
+async function fetchPage(pageUrl: string, token: string): Promise<Response> {
+  if (pageUrl.startsWith("http")) {
+    return fetch(pageUrl, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+  }
+  return spotifyFetch(pageUrl, token);
+}
+
 function shuffle<T>(array: T[]): T[] {
   return [...array].sort(() => Math.random() - 0.5);
 }
@@ -34,33 +43,45 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
   }
 
-  const res = await spotifyFetch(
-    `/playlists/${playlistId}/items?limit=50&additional_types=track`,
-    accessToken,
-  );
+  // fetch ALL tracks using pagination
+  let allTracks: Track[] = [];
+  let nextUrl: string | null =
+    `/playlists/${playlistId}/items?limit=50&additional_types=track`;
 
-  if (!res.ok) {
-    const errorBody = await res.json();
-    console.error("Spotify error:", res.status, JSON.stringify(errorBody));
-    return NextResponse.json(
-      { error: "Failed to fetch playlist items", details: errorBody },
-      { status: 500 },
-    );
+  while (nextUrl) {
+    const pageRes: Response = await fetchPage(nextUrl, accessToken);
+
+    if (!pageRes.ok) {
+      const errorBody: unknown = await pageRes.json();
+      console.error(
+        "Spotify error:",
+        pageRes.status,
+        JSON.stringify(errorBody),
+      );
+      return NextResponse.json(
+        { error: "Failed to fetch playlist items", details: errorBody },
+        { status: 500 },
+      );
+    }
+
+    const pageData: { items: PlaylistEntry[]; next: string | null } =
+      await pageRes.json();
+
+    const pageTracks: Track[] = pageData.items
+      .map((entry: PlaylistEntry) => entry.item)
+      .filter(
+        (item: Track | null | undefined): item is Track =>
+          item !== null &&
+          item !== undefined &&
+          item.type === "track" &&
+          item.id !== undefined,
+      );
+
+    allTracks = [...allTracks, ...pageTracks];
+    nextUrl = pageData.next ?? null;
   }
 
-  const data = await res.json();
-
-  const allTracks: Track[] = data.items
-    .map((entry: PlaylistEntry) => entry.item)
-    .filter(
-      (item: Track | null | undefined): item is Track =>
-        item !== null &&
-        item !== undefined &&
-        item.type === "track" &&
-        item.id !== undefined,
-    );
-
-  console.log("tracks found:", allTracks.length);
+  console.log("total tracks fetched:", allTracks.length);
 
   if (allTracks.length < 4) {
     return NextResponse.json(
@@ -105,13 +126,12 @@ export async function GET(req: NextRequest) {
     }),
   );
 
-  // filter out rounds with no preview URL then cap at exactly 10
   const validRounds = rounds.filter((r) => r.previewUrl !== null).slice(0, 10);
 
   if (validRounds.length < 4) {
     return NextResponse.json(
       {
-        error: `Not enough previewable tracks found, only got ${validRounds.length}`,
+        error: `Not enough previewable tracks, only got ${validRounds.length}`,
       },
       { status: 500 },
     );

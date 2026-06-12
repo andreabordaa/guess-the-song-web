@@ -32,7 +32,8 @@ export async function GET() {
 
   // only return playlists owned by the current user
   const ownedPlaylists = data.items.filter(
-    (playlist: { owner: { id: string } }) => playlist.owner.id === userId,
+    (playlist: { owner: { id: string }; items: { total: number } | null }) =>
+      playlist.owner.id === userId && (playlist.items?.total ?? 0) > 10,
   );
 
   return NextResponse.json(ownedPlaylists);

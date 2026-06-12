@@ -1,36 +1,67 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Guess the Song 🎵
+
+A web-based music guessing game where you test your knowledge of your own Spotify playlists. Listen to a 5-second clip and guess the song from four options — how well do you really know your music?
+
+> ⚠️ **This app is currently in development and not yet available to the public.** Spotify integration is limited to approved users only during this phase.
+
+## About
+
+Guess the Song is a full-stack web application built as the web version of an existing Android app. It uses the Spotify Web API to fetch your playlists and streams short audio previews for you to guess.
+
+## Features
+
+- Spotify OAuth authentication
+- Browse and select from your own Spotify playlists
+- 10 rounds of 5-second audio previews per game
+- Multiple choice answers with correct/wrong feedback
+- Score tracking per game session
+- Results screen with round-by-round breakdown
+
+## Built With
+
+- [Next.js 14](https://nextjs.org) — React framework with App Router
+- [TypeScript](https://www.typescriptlang.org) — type safety
+- [Tailwind CSS v4](https://tailwindcss.com) — styling
+- [Spotify Web API](https://developer.spotify.com/documentation/web-api) — playlist and track data
+- [spotify-preview-finder](https://www.npmjs.com/package/spotify-preview-finder) — audio preview URLs
+- [Vercel](https://vercel.com) — deployment
+
+## Live Demo
+
+[https://guess-the-song-webapp.vercel.app](https://guess-the-song-webapp.vercel.app)
+
+> Note: The app is currently in **Spotify development mode**. Only pre-approved Spotify accounts can log in. If you'd like access, please reach out.
 
 ## Getting Started
 
-First, run the development server:
+Clone the repository and install dependencies:
+
+```bash
+git clone https://github.com/andreabordaa/guess-the-song-app
+cd guess-the-song
+npm install
+```
+
+Create a `.env.local` file in the root with the following variables:
+
+- SPOTIFY_CLIENT_ID=
+- SPOTIFY_CLIENT_SECRET=
+- SPOTIFY_REDIRECT_URI=
+- NEXTAUTH_SECRET==
+- NEXT_PUBLIC_APP_URL=
+
+Then run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to see the app.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project Status
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+🚧 Active development — core gameplay is functional, user accounts and leaderboard coming soon.
 
-## Learn More
+## Related
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [Android version](https://github.com/andreabordaa/guess-the-song-app) — the original mobile app this web version is based on

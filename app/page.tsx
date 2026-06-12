@@ -25,7 +25,7 @@ export default function Home() {
       </nav>
 
       {/* Hero */}
-      <section className="flex flex-col items-center text-center px-6 py-40 gap-6">
+      <section className="flex flex-col items-center text-center px-6 py-45 gap-6">
         <div className="bg-spotify/10 border border-spotify/25 text-spotify text-sm font-medium px-8 py-1.5 rounded-full">
           powered by your Spotify playlists
         </div>
@@ -80,9 +80,9 @@ export default function Home() {
       {/* How it works + Preview */}
       <section
         id="how-it-works"
-        className="flex flex-col items-center px-6 py-16 gap-12"
+        className="flex flex-col items-center px-6 py-40 gap-12"
       >
-        <div className="flex flex-col items-center gap-2 text-center mt-20">
+        <div className="flex flex-col items-center gap-8 text-center mt-20">
           <p className="text-sm text-brand-muted uppercase tracking-wider">
             how it works
           </p>
@@ -91,7 +91,7 @@ export default function Home() {
           </h2>
         </div>
         {/* Steps */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 py-8 gap-8 max-w-4xl w-full">
+        <div className="grid grid-cols-1 sm:grid-cols-3 py-20 mb-12 gap-8 max-w-4xl w-full">
           <div className="bg-bg-surface border border-brand-border rounded-2xl p-6 flex flex-col gap-4">
             <div className="w-8 h-8 rounded-full bg-spotify/15 border border-spotify/25 flex items-center justify-center text-spotify text-sm font-medium">
               1
@@ -128,77 +128,158 @@ export default function Home() {
             </p>
           </div>
         </div>
+      </section>
+
+      {/* Divider */}
+      <div className="h-px bg-brand-border mx-8" />
+
+      {/* Game Preview */}
+      <section className="flex flex-col items-center px-6 py-25 mb-12">
         {/* Game preview card */}
-        <div className="w-full max-w-4xl flex flex-col mt-20 gap-3">
-          <p className="text-sm text-brand-muted text-center uppercase tracking-wider py-8">
+        <div className="w-full max-w-2xl flex flex-col gap-3">
+          <p className="text-xs text-brand-muted text-center py-8 uppercase tracking-wider">
             game preview
           </p>
-          <div className="bg-bg-surface border border-brand-border rounded-2xl p-6 flex flex-col gap-4">
-            {/* Round + score */}
-            <div className="flex items-center justify-between py-4">
-              <div className="bg-spotify/10 border border-spotify/20 rounded-full px-3 py-1 text-sm text-spotify font-medium">
-                round 3/10
+
+          <div className="bg-bg-surface border border-brand-border rounded-2xl overflow-hidden">
+            {/* Top bar */}
+            <div className="flex items-center justify-between px-6 py-4 border-b border-brand-border">
+              <div>
+                <p className="text-xs text-brand-muted">playing from</p>
+                <p className="text-sm font-medium text-brand-text">
+                  best songs of the 80s 🪩
+                </p>
               </div>
-              <span className="text-sm text-brand-muted">score: 2</span>
+              <div className="flex items-center gap-3">
+                <div className="bg-spotify/10 border border-spotify/25 rounded-full px-4 py-1.5 text-sm text-spotify font-medium">
+                  score: 2 / 3
+                </div>
+                <div className="border border-brand-border text-brand-muted px-4 py-1.5 rounded-lg text-sm">
+                  exit
+                </div>
+              </div>
             </div>
 
-            {/* Mini player */}
-            <div className="bg-bg-primary border border-brand-border rounded-xl px-6 py-4 mb-2 flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-spotify flex items-center justify-center flex-shrink-0">
-                <svg
-                  className="w-5 h-5 ml-0.5"
-                  fill="black"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M6 4l14 8-14 8V4z" />
-                </svg>
-              </div>
-              {/* Waveform */}
-              <div className="flex items-center gap-1 flex-1 h-8 ">
-                {[
-                  6, 14, 20, 10, 18, 8, 16, 22, 12, 20, 14, 18, 10, 16, 8, 20,
-                ].map((h, i) => (
+            {/* Round dots */}
+            <div className="flex justify-center gap-2 pt-5">
+              {Array.from({ length: 10 }).map((_, i) => (
+                <div
+                  key={i}
+                  className={`w-2 h-2 rounded-full ${
+                    i < 3
+                      ? "bg-spotify"
+                      : i === 3
+                        ? "bg-teal-light ring-2 ring-teal-light/30"
+                        : "bg-white/10"
+                  }`}
+                />
+              ))}
+            </div>
+
+            <div className="px-6 py-5 flex flex-col gap-5">
+              <p className="text-center text-brand-muted text-sm">
+                round 4 of 10 — what song is this?
+              </p>
+
+              {/* Audio player */}
+              <div className="bg-bg-primary border border-brand-border rounded-2xl p-5 flex flex-col gap-4">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-full bg-spotify flex items-center justify-center flex-shrink-0">
+                    <svg
+                      className="w-5 h-5 ml-0.5"
+                      fill="black"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M6 4l14 8-14 8V4z" />
+                    </svg>
+                  </div>
+                  <div className="flex items-center gap-1 flex-1 h-8">
+                    {[
+                      6, 14, 20, 10, 18, 8, 16, 22, 12, 20, 14, 18, 10, 16, 8,
+                      20, 12, 18, 14, 10,
+                    ].map((h, i) => (
+                      <div
+                        key={i}
+                        style={{ height: h }}
+                        className={`w-1 rounded-sm ${
+                          i < 10 ? "bg-spotify" : "bg-teal-mid/40"
+                        }`}
+                      />
+                    ))}
+                  </div>
+                </div>
+                <div className="w-full bg-white/6 rounded-full h-1">
                   <div
-                    key={i}
-                    style={{ height: h }}
-                    className={`w-1 rounded-sm ${i < 8 ? "bg-spotify" : "bg-teal-mid/30"}`}
+                    className="bg-spotify h-1 rounded-full"
+                    style={{ width: "50%" }}
                   />
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-xs text-brand-muted">2.5s</span>
+                  <span className="text-xs text-brand-muted">5.0s</span>
+                </div>
+              </div>
+
+              {/* Answer options */}
+              <div className="flex flex-col gap-3">
+                {[
+                  {
+                    label: "A",
+                    text: "Girls Just Want to Have Fun",
+                    style: "bg-white/4 border-brand-border text-brand-text",
+                  },
+                  {
+                    label: "B",
+                    text: "Billie Jean",
+                    style: "bg-spotify/10 border-spotify/40 text-spotify",
+                  },
+                  {
+                    label: "C",
+                    text: "Purple Rain",
+                    style: "bg-wrong/8 border-wrong/30 text-wrong",
+                  },
+                  {
+                    label: "D",
+                    text: "Never Gonna Give You Up",
+                    style: "bg-white/4 border-brand-border text-brand-text",
+                  },
+                ].map((opt) => (
+                  <div
+                    key={opt.label}
+                    className={`w-full border rounded-xl px-5 py-4 text-sm flex items-center justify-between ${opt.style}`}
+                  >
+                    <span>{opt.text}</span>
+                    <div
+                      className={`w-6 h-6 rounded-full flex items-center justify-center text-xs ${
+                        opt.label === "B"
+                          ? "bg-spotify/20 text-spotify"
+                          : opt.label === "C"
+                            ? "bg-wrong/20 text-wrong"
+                            : "bg-white/6 text-brand-muted"
+                      }`}
+                    >
+                      {opt.label === "B"
+                        ? "✓"
+                        : opt.label === "C"
+                          ? "✗"
+                          : opt.label}
+                    </div>
+                  </div>
                 ))}
-              </div>
-              <span className="text-xs text-brand-muted flex-shrink-0">
-                2.5s
-              </span>
-            </div>
-
-            {/* Progress bar */}
-            <div className="w-full bg-white/6 rounded-full h-1">
-              <div
-                className="bg-spotify h-1 rounded-full"
-                style={{ width: "50%" }}
-              />
-            </div>
-
-            {/* Answer options */}
-            <div className="grid grid-cols-2 gap-4 py-4">
-              <div className="bg-white/4 border border-brand-border rounded-lg px-3 py-6 text-sm text-brand-text text-center">
-                Bohemian Rhapsody
-              </div>
-              <div className="bg-spotify/10 border border-spotify/40 rounded-lg px-3 py-6 text-sm text-spotify text-center font-medium">
-                Stairway to Heaven ✓
-              </div>
-              <div className="bg-wrong/20 border border-wrong/30 rounded-lg px-3 py-6 text-sm text-wrong text-center">
-                What Makes You Beautiful
-              </div>
-              <div className="bg-white/4 border border-brand-border rounded-lg px-3 py-6 text-sm text-brand-text text-center">
-                Billie Jean
               </div>
             </div>
           </div>
+
+          {/* Premium note */}
+          <p className="text-sm text-brand-muted/60 text-center">
+            <span className="text-spotify">✦</span> Spotify Premium required to
+            play
+          </p>
         </div>
       </section>
 
       {/* Footer */}
-      <section className="bg-bg-surface border-t border-brand-border mt-auto px-6 py-16 flex flex-col items-center gap-4 text-center">
+      <section className="bg-bg-surface border-t border-brand-border mt-auto px-6 py-16 flex flex-col items-center gap-8 text-center">
         <h2 className="text-4xl font-bold text-brand-text">
           ready to test your music knowledge?
         </h2>

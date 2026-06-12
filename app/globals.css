@@ -26,6 +26,10 @@
   --border-radius-2xl: 20px;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   background-color: var(--bg-primary);
   color: var(--text-primary);
